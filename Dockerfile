@@ -1,19 +1,12 @@
-FROM python:3.8-alpine
+FROM centos:8
 
-LABEL "com.github.actions.name"="S3 Sync"
-LABEL "com.github.actions.description"="Sync a directory to an AWS S3 repository"
-LABEL "com.github.actions.icon"="refresh-cw"
-LABEL "com.github.actions.color"="green"
+RUN dnf -y install glibc-locale-source glibc-langpack-en 
 
-LABEL version="0.5.1"
-LABEL repository="https://github.com/jakejarvis/s3-sync-action"
-LABEL homepage="https://jarv.is/"
-LABEL maintainer="Jake Jarvis <jake@jarv.is>"
+RUN localedef -i en_US -f UTF-8 en_US.UTF-8
 
-# https://github.com/aws/aws-cli/blob/master/CHANGELOG.rst
-ENV AWSCLI_VERSION='1.18.14'
+RUN dnf install python3 -y
 
-RUN pip install --no-cache-dir awscli
+RUN pip3 install --no-cache-dir awscli
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
